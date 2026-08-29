@@ -36,8 +36,6 @@ The project demonstrates:
 | **Documentation**     | Data catalogs, naming conventions and architecture diagrams |
 | **Version Control**   | Git & GitHub                                                |
 
-## Skills showcased: 
-SQL development, ETL design, data modeling, data quality, documentation.
 ---
 
 ## 🛠️ Tools & Technologies
@@ -66,48 +64,18 @@ The warehouse is designed to support:
 * Analytical queries
 
 ---
-
 ## 📌 Key Specifications
 
-### Source Systems
-
-The project uses data from two source systems:
-
-**CRM**
-
-* `cust_info`
-* `prd_info`
-* `sales_details`
-
-**ERP**
-
-* `CUST_AZ12`
-* `LOC_A101`
-* `PX_CAT_G1V2`
-
-### Data Quality
-
-The project identifies and resolves common data-quality issues such as:
-
-* Missing values
-* Duplicate records
-* Invalid dates
-* Incorrect data types
-* Inconsistent gender values
-* Inconsistent marital-status values
-* Inconsistent product-line codes
-* Invalid product and customer references
-
-### Data Integration
-
-CRM and ERP datasets are integrated into a unified data warehouse model.
-
-### Data Scope
-
-This project focuses on the **latest available snapshot** of the data.
-
-It does not implement full historical tracking such as **Slowly Changing Dimension Type 2 (SCD Type 2)**.
-
+- **Database:** Microsoft SQL Server
+- **Architecture:** Medallion (Bronze → Silver → Gold)
+- **Sources:** CRM & ERP CSV files
+- **ETL:** Extract → Load → Transform
+- **Data Processing:** Cleaning, Transformation & Validation
+- **Data Model:** Star Schema
+- **Gold Layer:** `dim_customers`, `dim_products`, `fact_sales`
+- **Data Quality:** Nulls, Duplicates, Invalid Dates & Inconsistent Values
+- **Scope:** Latest Data Snapshot
+- **Documentation:** Data Catalogs & Naming Conventions
 ---
 
 # 📂 Repository Structure
@@ -185,159 +153,6 @@ ERP CSV Files ──────┘
 
 ---
 
-# ▶️ How to Run the Project
-
-## 1. Prerequisites
-
-Install the following:
-
-* Microsoft SQL Server
-* SQL Server Management Studio (SSMS)
-* Git
-
-SQL Server **Express** or **Developer Edition** can be used.
-
----
-
-## 2. Clone the Repository
-
-Clone the project from GitHub and open the project folder.
-
-```bash
-git clone <your-github-repository-url>
-```
-
----
-
-## 3. Create Database & Schemas
-
-Open SSMS and execute:
-
-```text
-scripts/Bronze/CreateDatabase_Schemas.sql
-```
-
-This creates the:
-
-```text
-DataWarehouse
-```
-
-database along with:
-
-```text
-bronze
-silver
-gold
-```
-
-schemas.
-
----
-
-# 🥉 4. Bronze Layer
-
-### Step 1 – Create Bronze Tables
-
-Run:
-
-```text
-scripts/Bronze/CreateBronze_Tables.sql
-```
-
-### Step 2 – Load Source Data
-
-Run:
-
-```text
-scripts/Bronze/Insert_BulkData_into_Tables.sql
-```
-
-The data is loaded from CSV files using SQL Server's:
-
-```sql
-BULK INSERT
-```
-
-> **Important:** Update the CSV file paths in the script according to your local dataset location.
-
-### Step 3 – Run Data Quality Checks
-
-Run:
-
-```text
-scripts/Bronze/BronzeLayer_Data_Quality_Check.sql
-```
-
-This validates the raw data and helps identify issues before transformation.
-
----
-
-# 🥈 5. Silver Layer
-
-### Step 1 – Create Silver Tables
-
-Run:
-
-```text
-scripts/Silver/Silver_Layer_Tables.sql
-```
-
-### Step 2 – Transform Bronze Data
-
-Run:
-
-```text
-scripts/Silver/Bronze_to_Silver_Data_Inserting.sql
-```
-
-The Bronze data is transformed and loaded into the Silver layer.
-
-Typical transformations include:
-
-* Data type conversion
-* Duplicate removal
-* Null handling
-* Date conversion
-* Value standardization
-* Data cleansing
-
-### Step 3 – Run Quality Checks
-
-Run:
-
-```text
-scripts/Silver/SilverLayer_Data_Cleansing_Quality_Checking.sql
-```
-
-This validates the cleaned Silver data.
-
----
-
-# 🥇 6. Gold Layer
-
-### Step 1 – Create Gold Layer
-
-Run:
-
-```text
-scripts/Gold/Creating_Gold_Layer_Tables.sql
-```
-
-The Gold layer organizes the cleaned data into a business-friendly **Star Schema**.
-
-### Step 2 – Validate Gold Data
-
-Run:
-
-```text
-scripts/Gold/Gold_Layer_Data_Cleaning.sql
-```
-
-This performs additional validation and ensures that the final analytical model is reliable.
-
----
-
 # ⭐ Gold Layer – Star Schema
 
 The Gold layer contains the following analytical objects:
@@ -348,114 +163,17 @@ The Gold layer contains the following analytical objects:
 | `gold.dim_products`  | Dimension | Product information, category, cost and product line              |
 | `gold.fact_sales`    | Fact      | Sales transactions including orders, quantities, prices and dates |
 
-### Star Schema
-
-```text
-                    ┌─────────────────────┐
-                    │   dim_customers     │
-                    │─────────────────────│
-                    │ customer_key        │
-                    │ customer_id         │
-                    │ customer_name       │
-                    │ demographics        │
-                    │ geography           │
-                    └──────────┬──────────┘
-                               │
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │     fact_sales      │
-                    │─────────────────────│
-                    │ order_number        │
-                    │ customer_key        │
-                    │ product_key         │
-                    │ order_date          │
-                    │ quantity            │
-                    │ sales_amount        │
-                    └──────────┬──────────┘
-                               │
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │    dim_products     │
-                    │─────────────────────│
-                    │ product_key         │
-                    │ product_id          │
-                    │ product_name        │
-                    │ category            │
-                    │ product_line        │
-                    │ cost                │
-                    └─────────────────────┘
-```
 
 ---
 
-# 🧹 Data Quality & Cleansing
+## 📋 Data Quality Highlights
 
-Data quality checks are performed throughout the pipeline.
-
-## Bronze Layer
-
-The raw data is inspected for:
-
-* Null values
-* Duplicate records
-* Invalid values
-* Unexpected data types
-* Missing records
-
-## Silver Layer
-
-Data is cleaned and standardized by:
-
-* Removing or handling duplicates
-* Converting incorrect data types
-* Standardizing categorical values
-* Validating dates
-* Handling missing values
-* Resolving inconsistent codes
-
-## Gold Layer
-
-The final model is validated for:
-
-* Referential integrity
-* Valid dimension relationships
-* Duplicate business keys
-* Missing dimension references
-* Valid fact records
-* Consistent analytical data
-
----
-
-# 📊 Data Transformation Examples
-
-Some of the major transformations performed in the Silver layer include:
-
-### Customer Data
-
-* Standardizing gender values
-* Cleaning marital-status values
-* Validating customer identifiers
-* Integrating CRM and ERP customer information
-* Handling missing demographic information
-
-### Product Data
-
-* Standardizing product-line codes
-* Validating product categories
-* Cleaning product names
-* Validating product costs
-* Integrating CRM and ERP product information
-
-### Sales Data
-
-* Validating order dates
-* Converting date formats
-* Validating quantities
-* Validating sales amounts
-* Connecting sales transactions with customers and products
-
+- Null / missing value handling
+- Duplicate detection and resolution
+- Standardization of gender, marital status, and product line codes
+- Date format conversion and validation
+- Referential integrity between facts and dimensions
+- Consistent naming using `docs/naming_conventions.md`
 ---
 
 # 📚 Documentation
@@ -488,51 +206,16 @@ The Gold layer can be used to answer business questions such as:
 * How does sales performance vary by customer geography?
 
 ---
+## 🎯 Project Outcomes
 
-# 🎯 Project Outcomes
-
-By completing this project, the following data-engineering concepts are demonstrated:
-
-✅ Medallion Architecture
-
-✅ ETL Pipeline Development
-
-✅ SQL Server Data Warehousing
-
-✅ Data Cleaning & Transformation
-
-✅ Data Quality Validation
-
-✅ CRM & ERP Data Integration
-
-✅ Star Schema Data Modeling
-
-✅ Fact & Dimension Design
-
-✅ T-SQL Development
-
-✅ SQL Server `BULK INSERT`
-
-✅ Git & GitHub Version Control
-
-✅ Technical Documentation
-
----
-
-# 📌 Future Enhancements
-
-Possible future improvements include:
-
-* Implementing **Slowly Changing Dimensions (SCD Type 2)**
-* Adding incremental data loading
-* Automating ETL pipelines
-* Adding SQL Server Agent jobs
-* Implementing additional data-quality frameworks
-* Connecting the Gold layer to **Power BI**
-* Creating interactive sales dashboards
-* Adding performance optimization and indexing
-* Implementing automated data validation
-
+- 🟢 Built SQL Data Warehouse
+- 🟢 Implemented Medallion Architecture
+- 🟢 Integrated CRM & ERP data
+- 🟢 Cleaned & transformed data
+- 🟢 Implemented data quality checks
+- 🟢 Created Star Schema
+- 🟢 Built customer, product & sales models
+- 🟢 Prepared data for analytics & reporting
 ---
 
 # 📜 License
