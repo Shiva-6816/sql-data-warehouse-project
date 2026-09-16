@@ -47,7 +47,7 @@ begin
 		--Table 1
 		print '>>Inserting Table : bronze.crm_cust_info';
 		bulk insert bronze.crm_cust_info
-		from 'D:\sql\66d6e2d390db480c9a4d86b5222aa88b\sql-ultimate-course-main\sql-data-warehouse-project\sql-data-warehouse-project\datasets\source_crm\cust_info.csv'
+		from 'cust_info.csv'
 		with (
 			firstrow = 2,
 			FIELDTERMINATOR = ',',
@@ -64,7 +64,7 @@ begin
 	
 		print '>>Inserting Table : bronze.crm_prd_info';
 		BULK INSERT bronze.crm_prd_info
-		FROM 'D:\sql\66d6e2d390db480c9a4d86b5222aa88b\sql-ultimate-course-main\sql-data-warehouse-project\sql-data-warehouse-project\datasets\source_crm\prd_info.csv'
+		FROM 'prd_info.csv'
 		with (
 			firstrow = 2,
 			fieldterminator = ',',
@@ -81,7 +81,7 @@ begin
 
 		print '>>Inserting Table : bronze.crm_Sales_details';
 		bulk Insert bronze.crm_Sales_details
-		from 'D:\sql\66d6e2d390db480c9a4d86b5222aa88b\sql-ultimate-course-main\sql-data-warehouse-project\sql-data-warehouse-project\datasets\source_crm\sales_details.csv'
+		from 'sales_details.csv'
 		with(
 			firstrow = 2,
 			fieldterminator = ',',
@@ -103,7 +103,7 @@ begin
 
 		print '>>Inserting Table : bronze.erp_CUST_AZ12';
 		bulk Insert bronze.erp_CUST_AZ12
-		from 'D:\sql\66d6e2d390db480c9a4d86b5222aa88b\sql-ultimate-course-main\sql-data-warehouse-project\sql-data-warehouse-project\datasets\source_erp\CUST_AZ12.csv'
+		from 'CUST_AZ12.csv'
 		with(
 			firstrow = 2,
 			fieldterminator = ',',
@@ -120,7 +120,7 @@ begin
 
 		print '>>Inserting Table : bronze.erp_LOC_A101';
 		bulk Insert bronze.erp_LOC_A101
-		from 'D:\sql\66d6e2d390db480c9a4d86b5222aa88b\sql-ultimate-course-main\sql-data-warehouse-project\sql-data-warehouse-project\datasets\source_erp\LOC_A101.csv'
+		from 'LOC_A101.csv'
 		with(
 			firstrow = 2,
 			fieldterminator = ',',
@@ -138,7 +138,7 @@ begin
 
 		print '>>Inserting Table : bronze.erp_PX_CAT_G1V2';
 		bulk Insert bronze.erp_PX_CAT_G1V2
-		from 'D:\sql\66d6e2d390db480c9a4d86b5222aa88b\sql-ultimate-course-main\sql-data-warehouse-project\sql-data-warehouse-project\datasets\source_erp\PX_CAT_G1V2.csv'
+		from 'PX_CAT_G1V2.csv'
 		with(
 			firstrow = 2,
 			fieldterminator = ',',
